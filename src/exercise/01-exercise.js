@@ -1,13 +1,11 @@
 // Code splitting
 // http://localhost:3000/isolated/exercise/01.js
 
-/* OVERWRITE THE RESPECTIVE EXERCISE SOLUTIONS IN THIS FILE TO VIEW THE PAGE ON THE ABOVE ADDRESS*/
-/* eg: COPY "01-exercise.js" FILE AND PASTE HERE TO LOAD ON THE ABOVE LOCALHOST ADDR */
-
 import * as React from "react";
 
-const loadGlobe = () => import(/* webpackPrefetch: true */ "../globe");
-const Globe = React.lazy(loadGlobe);
+// Create a Globe component which uses a dynamic import
+// to get the Globe component from the '../globe' module.
+const Globe = React.lazy(() => import("../globe"));
 
 function App() {
   const [showGlobe, setShowGlobe] = React.useState(false);
