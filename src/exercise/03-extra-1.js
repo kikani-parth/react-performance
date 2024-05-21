@@ -1,9 +1,6 @@
 // React.memo for reducing unnecessary re-renders
 // http://localhost:3000/isolated/exercise/03.js
 
-/* OVERWRITE THE RESPECTIVE EXERCISE SOLUTIONS IN THIS FILE TO VIEW THE PAGE ON THE ABOVE ADDRESS*/
-/* eg: COPY "03-exercise.js" FILE AND PASTE HERE TO LOAD ON THE ABOVE LOCALHOST ADDR */
-
 import * as React from "react";
 import { useCombobox } from "../use-combobox";
 import { getItems } from "../workerized-filter-cities";
@@ -24,8 +21,8 @@ function Menu({
           getItemProps={getItemProps}
           item={item}
           index={index}
-          isSelected={selectedItem?.id === item.id}
-          isHighlighted={highlightedIndex === index}
+          selectedItem={selectedItem}
+          highlightedIndex={highlightedIndex}
         >
           {item.name}
         </ListItem>
@@ -39,10 +36,12 @@ function ListItem({
   getItemProps,
   item,
   index,
-  isSelected,
-  isHighlighted,
+  selectedItem,
+  highlightedIndex,
   ...props
 }) {
+  const isSelected = selectedItem?.id === item.id;
+  const isHighlighted = highlightedIndex === index;
   return (
     <li
       {...getItemProps({
@@ -58,7 +57,26 @@ function ListItem({
   );
 }
 
-ListItem = React.memo(ListItem);
+ListItem = React.memo(ListItem, (prevProps, nextProps) => {
+  // true means do NOT rerender
+  // false means DO rerender
+
+  // these ones are easy if any of these changed, we should re-render
+  if (prevProps.getItemProps !== nextProps.getItemProps) return false;
+  if (prevProps.item !== nextProps.item) return false;
+  if (prevProps.index !== nextProps.index) return false;
+  if (prevProps.selectedItem !== nextProps.selectedItem) return false;
+
+  // this is trickier. We should only re-render if this list item:
+  // 1. was highlighted before and now it's not
+  // 2. was not highlighted before and now it is
+  if (prevProps.highlightedIndex !== nextProps.highlightedIndex) {
+    const wasPrevHighlighted = prevProps.highlightedIndex === prevProps.index;
+    const isNowHighlighted = nextProps.highlightedIndex === nextProps.index;
+    return wasPrevHighlighted === isNowHighlighted;
+  }
+  return true;
+});
 
 function App() {
   const forceRerender = useForceRerender();

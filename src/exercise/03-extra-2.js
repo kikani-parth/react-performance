@@ -1,9 +1,6 @@
 // React.memo for reducing unnecessary re-renders
 // http://localhost:3000/isolated/exercise/03.js
 
-/* OVERWRITE THE RESPECTIVE EXERCISE SOLUTIONS IN THIS FILE TO VIEW THE PAGE ON THE ABOVE ADDRESS*/
-/* eg: COPY "03-exercise.js" FILE AND PASTE HERE TO LOAD ON THE ABOVE LOCALHOST ADDR */
-
 import * as React from "react";
 import { useCombobox } from "../use-combobox";
 import { getItems } from "../workerized-filter-cities";
